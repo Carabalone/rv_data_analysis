@@ -53,13 +53,16 @@ def main():
 
     for idx, row in df.iterrows():
         if row['InitiatedAction'] == 'Missed target':
-            # Find the next Destroyed action after the current row
-            next_destroyed = df.loc[idx + 1:, 'InitiatedAction'].eq('Destroyed').idxmax()
-            if next_destroyed != idx:  # Ensure a valid next_destroyed is found
-                # Fill in Gun and AimStyle from the next Destroyed action
-                df.at[idx, 'Gun'] = df.at[next_destroyed, 'Gun']
-                df.at[idx, 'AimStyle'] = df.at[next_destroyed, 'AimStyle'] 
-                df.at[idx, 'TargetType'] = df.at[next_destroyed, 'TargetType'] 
+            try:
+                next_destroyed = df.loc[idx + 1:, 'InitiatedAction'].eq('Destroyed').idxmax()
+                if next_destroyed != idx:
+                    df.at[idx, 'Gun'] = df.at[next_destroyed, 'Gun']
+                    df.at[idx, 'AimStyle'] = df.at[next_destroyed, 'AimStyle']
+                    df.at[idx, 'TargetType'] = df.at[next_destroyed, 'TargetType']
+            except:
+                df.at[idx, 'Gun'] = 'UKNOWN'
+                df.at[idx, 'AimStyle'] = 'UKNOWN'
+                df.at[idx, 'TargetType'] = 'UKNOWN'
 
 # Select relevant columns
     final_df = df[['Timestamp', 'InitiatedAction', 'TargetType', 'Position', 'Gun', 'AimStyle']]
@@ -150,17 +153,12 @@ def main():
 
     final_df.to_csv('tmp/' + file_name, index=False)
 
+    name = file_name.replace('.csv','').replace('DataLog_', '').replace("raw_data", "").replace("/", "")
     final_df.to_csv('tmp/final_df.csv', index=False)
-    accuracy_df.to_csv('tmp/accuracy_df.csv', index=False)
-    time_df.to_csv('tmp/time_df.csv', index=False)
     result_df.to_csv('tmp/result_df.csv', index=False)
 
 # Print confirmation
-    print("DataFrames saved to /tmp directory:")
-    print("- final_df.csv")
-    print("- accuracy_df.csv")
-    print("- time_df.csv")
-    print("- result_df.csv")
+    print("DataFrames saved to /tmp directory")
 
 
 if __name__ == "__main__":
