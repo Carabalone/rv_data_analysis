@@ -1,9 +1,12 @@
 import pandas as pd
 import numpy as np
 import sys
+import os
 from scipy.stats import f_oneway, shapiro
-from media import *
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from media import *
 
 def parse_position(position):
     if pd.isna(position):
@@ -12,37 +15,26 @@ def parse_position(position):
     return (x, y, z)
 
 def calculate_accuracy_df(df):
-    # Calculate Accuracy
-# Count "Destroyed" and "Missed target" actions
-
+    # Create a new DataFrame with Gun, AimStyle, and Hit (True/False)
     hit_df = df[df['InitiatedAction'].isin(['Hit', 'Missed target'])].copy()
     hit_df['Hit'] = hit_df['InitiatedAction'] == 'Hit'
     hit_df = hit_df[['Gun', 'AimStyle', 'Hit']]
 
+    # Calculate Accuracy
     destroyed_counts = df[df['InitiatedAction'] == 'Destroyed'].groupby(['AimStyle', 'Gun']).size().reset_index(name='destroyed')
     missed_counts = df[df['InitiatedAction'] == 'Missed target'].groupby(['AimStyle', 'Gun']).size().reset_index(name='missed')
 
-# Combine counts
+    # Combine counts
     accuracy_df = pd.merge(destroyed_counts, missed_counts, on=['AimStyle', 'Gun'], how='outer').fillna(0)
 
-# Calculate accuracy
+    # Calculate accuracy
     accuracy_df['accuracy'] = accuracy_df['destroyed'] / (accuracy_df['destroyed'] + accuracy_df['missed'])
 
-    print("Average Accuracy by AimStyle and Gun:")
-    print(accuracy_df[['AimStyle', 'Gun', 'accuracy']])
-    return hit_df
+    # print("Average Accuracy by AimStyle and Gun:")
+    # print(accuracy_df[['AimStyle', 'Gun', 'accuracy']])
+    return hit_df, accuracy_df
 
 def calculate_distance_df(df):
-    # Function to parse Position into x, y, z
-    def parse_position(position):
-        if pd.isna(position):
-            return (None, None, None)
-        try:
-            x, y, z = map(float, position.split())
-            return (x, y, z)
-        except ValueError:
-            return (None, None, None)
-    
     # Apply the function and create new columns
     df[['x', 'y', 'z']] = df['Position'].apply(parse_position).apply(pd.Series)
     
@@ -86,11 +78,9 @@ def calculate_distance_df(df):
     # Calculate average distance per AimStyle and Gun
     avg_distance = distance_df.groupby(['AimStyle', 'Gun'])['distance'].mean().reset_index()
     
-    print("\nAverage Distance to Bullseye by AimStyle and Gun:")
-    print(avg_distance)
-    distance_df.to_csv('tmp/distance_df.csv')
-    
-    return distance_df
+    # print("\nAverage Distance to Bullseye by AimStyle and Gun:")
+    # print(avg_distance)
+    return distance_df, avg_distance
 
 def calculate_avg_time_to_destroy_df(df):
     # Initialize a list to store time differences
@@ -133,9 +123,8 @@ def calculate_avg_time_to_destroy_df(df):
     # Calculate the average time difference per Gun and AimStyle combo
     avg_time_df = time_diff_df.groupby(['Gun', 'AimStyle'])['TimeDiff'].mean().reset_index()
 
-    print(f"Average Time to Destroy:\n{avg_time_df}")
-
-    return time_diff_df
+    # print(f"Average Time to Destroy:\n{avg_time_df}")
+    return time_diff_df, avg_time_df
 
 def calculate_anova(df, metric):
     groups = [
@@ -146,6 +135,8 @@ def calculate_anova(df, metric):
         df[(df['Gun'] == 'PISTOL') & (df['AimStyle'] == 'SPHERE')][metric],
         df[(df['Gun'] == 'PISTOL') & (df['AimStyle'] == 'NO_AIM')][metric]
     ]
+
+
     combo = [
         'rifle line',
         'rifle sphere',
@@ -159,47 +150,78 @@ def calculate_anova(df, metric):
         stat, p = shapiro(group)
         print(f"Shapiro-Wilk Test for {combo[i]}: Stat={stat}, p={p}")
 
-
-    f_stat, p_value= f_oneway(*groups)
+    f_stat, p_value = f_oneway(*groups)
     print(f"{metric.capitalize()} - F-statistic: {f_stat:.4f}, P-value: {p_value:.4f}")
 
 def main():
     if len(sys.argv) < 2:
-        print("provide file name")
+        print("Provide directory containing session files")
         exit(0)
 
-    filename = sys.argv[1]
+    directory = sys.argv[1]
 
-    df = pd.read_csv(filename)
+    # Initialize empty DataFrames to store combined data
+    combined_hit_df = pd.DataFrame()
+    combined_distance_df = pd.DataFrame()
+    combined_time_diff_df = pd.DataFrame()
+    combined_accuracy_df = pd.DataFrame()
 
-    df[['x', 'y', 'z']] = df['Position'].apply(parse_position).apply(pd.Series)
+    # Iterate over all session files in the directory
+    for filename in os.listdir(directory):
+        if filename.endswith(".csv"):
+            filepath = os.path.join(directory, filename)
+            print(f"Processing {filename}...")
 
-    hit_df = calculate_accuracy_df(df)
+            # Load the session data
+            df = pd.read_csv(filepath)
+            df[['x', 'y', 'z']] = df['Position'].apply(parse_position).apply(pd.Series)
 
-    distance_df = calculate_distance_df(df)
+            # Calculate metrics for the current session
+            hit_df, accuracy_df = calculate_accuracy_df(df)
+            distance_df, avg_distance_df = calculate_distance_df(df)
+            time_diff_df, avg_time_df = calculate_avg_time_to_destroy_df(df)
 
-    avg_time_df = calculate_avg_time_to_destroy_df(df)
+            # Append the data to the combined DataFrames
+            combined_accuracy_df = pd.concat([combined_accuracy_df, accuracy_df], ignore_index=True)
+            combined_hit_df = pd.concat([combined_hit_df, hit_df], ignore_index=True)
+            combined_distance_df = pd.concat([combined_distance_df, distance_df], ignore_index=True)
+            combined_time_diff_df = pd.concat([combined_time_diff_df, time_diff_df], ignore_index=True)
 
-    # create_heatmaps(distance_df)
+    # Calculate combined averages
+    combined_accuracy_avg = combined_accuracy_df.groupby(['AimStyle', 'Gun'])['accuracy'].mean().reset_index()
+    combined_distance_avg = combined_distance_df.groupby(['AimStyle', 'Gun'])['distance'].mean().reset_index()
+    combined_time_avg = combined_time_diff_df.groupby(['AimStyle', 'Gun'])['TimeDiff'].mean().reset_index()
 
-    # create_box_plot(avg_time_df)
+    combined_df = pd.merge(combined_accuracy_avg, combined_distance_avg, on=['AimStyle', 'Gun'], suffixes=('_accuracy', '_distance'))
 
-    print("ANOVA for Accuracy:")
-    calculate_anova(hit_df, 'Hit')
+    combined_df = pd.merge(combined_df, combined_time_avg, on=['AimStyle', 'Gun'])
 
-    print("\nANOVA for Distance to Bullseye:")
-    calculate_anova(distance_df, 'distance')
+    combined_df.rename(columns={'TimeDiff': 'TimeDiff_avg'}, inplace=True)
 
-    print("\nANOVA for Time to Destroy:")
-    calculate_anova(avg_time_df, 'TimeDiff')
+    print(combined_df)
 
-    tukey_data = hit_df[['Gun', 'AimStyle', 'Hit']]
+    # Perform ANOVA and Tukey's HSD on the combined data
+    print("\nANOVA for Combined Accuracy:")
+    calculate_anova(combined_hit_df, 'Hit')
+
+    print("\nANOVA for Combined Distance to Bullseye:")
+    calculate_anova(combined_distance_df, 'distance')
+
+    print("\nANOVA for Combined Time to Destroy:")
+    calculate_anova(combined_time_diff_df, 'TimeDiff')
+
+    # Perform Tukey's HSD for accuracy
+    tukey_data = combined_hit_df[['Gun', 'AimStyle', 'Hit']]
     tukey_data['Combination'] = tukey_data['Gun'] + '-' + tukey_data['AimStyle']
 
+    print("\nTukey's HSD for Combined Accuracy:")
     tukey_results = pairwise_tukeyhsd(tukey_data['Hit'], tukey_data['Combination'])
     print(tukey_results)
 
 
+    # create_heatmaps(combined_distance_df)
+
+    create_box_plot(combined_time_diff_df)
+
 if __name__ == '__main__':
     main()
-

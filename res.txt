@@ -1,0 +1,65 @@
+Processing session1.csv...
+Processing session2.csv...
+Processing session3.csv...
+Processing session4.csv...
+Processing session5.csv...
+Processing session6.csv...
+Processing session7.csv...
+Processing session8.csv...
+Processing session9.csv...
+  AimStyle     Gun  accuracy  distance  TimeDiff_avg
+0     LINE  PISTOL  0.741623  0.229698      3.648387
+1     LINE   RIFLE  0.745041  0.276347      4.905882
+2   NO_AIM  PISTOL  0.488210  0.325329      6.001124
+3   NO_AIM   RIFLE  0.528857  0.291725      4.614737
+4   SPHERE  PISTOL  0.777615  0.241265      3.700000
+5   SPHERE   RIFLE  0.702068  0.265935      4.692929
+
+ANOVA for Combined Accuracy:
+Shapiro-Wilk Test for rifle line: Stat=0.5651676654815674, p=6.993188591749137e-19
+Shapiro-Wilk Test for rifle sphere: Stat=0.6198375821113586, p=5.707619638895255e-19
+Shapiro-Wilk Test for rifle noaim: Stat=0.6336463689804077, p=7.748217054629745e-22
+Shapiro-Wilk Test for pistol line: Stat=0.563022792339325, p=8.532775404936163e-19
+Shapiro-Wilk Test for pistol sphere: Stat=0.5587995052337646, p=4.494281648093152e-19
+Shapiro-Wilk Test for pistol noaim: Stat=0.5882605314254761, p=3.6391945751214324e-25
+Hit - F-statistic: 26.4209, P-value: 0.0000
+
+ANOVA for Combined Distance to Bullseye:
+Shapiro-Wilk Test for rifle line: Stat=0.957709014415741, p=0.0024496885016560555
+Shapiro-Wilk Test for rifle sphere: Stat=0.9604108929634094, p=0.004302263725548983
+Shapiro-Wilk Test for rifle noaim: Stat=0.97053462266922, p=0.020215580239892006
+Shapiro-Wilk Test for pistol line: Stat=0.9557462334632874, p=0.0017823065863922238
+Shapiro-Wilk Test for pistol sphere: Stat=0.9527860283851624, p=0.0009138112072832882
+Shapiro-Wilk Test for pistol noaim: Stat=0.9640036821365356, p=0.014356855303049088
+Distance - F-statistic: 5.1603, P-value: 0.0001
+
+ANOVA for Combined Time to Destroy:
+Shapiro-Wilk Test for rifle line: Stat=0.4838296175003052, p=2.889367025938347e-17
+Shapiro-Wilk Test for rifle sphere: Stat=0.7158690094947815, p=1.506830684533389e-12
+Shapiro-Wilk Test for rifle noaim: Stat=0.6659886837005615, p=2.1926752948042694e-13
+Shapiro-Wilk Test for pistol line: Stat=0.8240346312522888, p=3.746519094960377e-09
+Shapiro-Wilk Test for pistol sphere: Stat=0.8021950721740723, p=5.854419726780691e-10
+Shapiro-Wilk Test for pistol noaim: Stat=0.5169996023178101, p=1.279308270951652e-15
+Timediff - F-statistic: 4.7810, P-value: 0.0003
+
+Tukey's HSD for Combined Accuracy:
+       Multiple Comparison of Means - Tukey HSD, FWER=0.05        
+==================================================================
+    group1        group2    meandiff p-adj   lower   upper  reject
+------------------------------------------------------------------
+  PISTOL-LINE PISTOL-NO_AIM   -0.397    0.0 -0.5359 -0.2581   True
+  PISTOL-LINE PISTOL-SPHERE   0.0058    1.0 -0.1531  0.1647  False
+  PISTOL-LINE    RIFLE-LINE   -0.003    1.0 -0.1622  0.1561  False
+  PISTOL-LINE  RIFLE-NO_AIM  -0.2622    0.0  -0.406 -0.1183   True
+  PISTOL-LINE  RIFLE-SPHERE  -0.1122 0.2985 -0.2663  0.0418  False
+PISTOL-NO_AIM PISTOL-SPHERE   0.4028    0.0  0.2649  0.5408   True
+PISTOL-NO_AIM    RIFLE-LINE    0.394    0.0  0.2557  0.5322   True
+PISTOL-NO_AIM  RIFLE-NO_AIM   0.1348 0.0178  0.0145  0.2552   True
+PISTOL-NO_AIM  RIFLE-SPHERE   0.2848    0.0  0.1524  0.4171   True
+PISTOL-SPHERE    RIFLE-LINE  -0.0089    1.0 -0.1672  0.1495  False
+PISTOL-SPHERE  RIFLE-NO_AIM   -0.268    0.0  -0.411  -0.125   True
+PISTOL-SPHERE  RIFLE-SPHERE  -0.1181 0.2384 -0.2713  0.0351  False
+   RIFLE-LINE  RIFLE-NO_AIM  -0.2591    0.0 -0.4024 -0.1159   True
+   RIFLE-LINE  RIFLE-SPHERE  -0.1092 0.3251 -0.2627  0.0443  False
+ RIFLE-NO_AIM  RIFLE-SPHERE   0.1499 0.0234  0.0124  0.2875   True
+------------------------------------------------------------------

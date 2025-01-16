@@ -151,11 +151,12 @@ def main():
 
     final_df = final_df[['TestID', 'Timestamp', 'ElapsedTime', 'InitiatedAction', 'TargetType', 'Gun', 'AimStyle', 'Position']]
 
-    final_df.to_csv('tmp/' + file_name, index=False)
+    final_df.to_csv('tmp/' + file_name.replace("raw_data", ""). replace("/",""), index=False)
 
     name = file_name.replace('.csv','').replace('DataLog_', '').replace("raw_data", "").replace("/", "")
+    print(file_name)
     final_df.to_csv('tmp/final_df.csv', index=False)
-    result_df.to_csv('tmp/result_df.csv', index=False)
+    #result_df.to_csv('tmp/result_df.csv', index=False)
 
 # Print confirmation
     print("DataFrames saved to /tmp directory")
