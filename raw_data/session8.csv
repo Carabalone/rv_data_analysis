@@ -1,0 +1,205 @@
+Timestamp,InitiatedAction,ActionData,Id
+19:39.4,started session,3,3
+19:57.1,Destroyed, Cube (1) at (-0.001143069 3.030752 10.17472),3
+19:57.1,Hit, with rifle at (0.1033567 2.961509 10.16221) using aim style 0,3
+20:01.8,Destroyed, Cube (2) at (-8.089005 3.019765 10.11118),3
+20:01.8,Hit, with rifle at (-7.959772 2.891286 10.20514) using aim style 0,3
+20:05.7,Destroyed, Cube (3) at (8.083402 3.018516 10.10508),3
+20:05.7,Hit, with rifle at (7.864118 3.350915 10.18834) using aim style 0,3
+20:08.1,Missed target,,3
+20:08.8,Destroyed, cricular motion at (1.300869 1.79487 10.15566),3
+20:08.8,Hit, with rifle at (1.295198 1.770815 10.13248) using aim style 0,3
+20:11.3,Missed target,,3
+20:11.9,Missed target,,3
+20:12.7,Missed target,,3
+20:13.9,Missed target,,3
+20:14.4,Destroyed, cricular motion at (0.2428799 4.10001 30.03319),3
+20:14.4,Hit, with rifle at (0.7384456 3.652283 30.04766) using aim style 0,3
+20:17.2,Destroyed, linear motion at (-1.006212 4.316702 19.85005),3
+20:17.2,Hit, with rifle at (-1.015439 3.969424 19.87812) using aim style 0,3
+20:20.0,Missed target,,3
+20:21.1,Destroyed, linear motion at (-0.0003211499 3.339513 20.39383),3
+20:21.1,Hit, with rifle at (-0.01763635 3.462608 20.35597) using aim style 0,3
+20:23.3,Destroyed, cricular motion at (-0.3430635 4.055081 19.86069),3
+20:23.3,Hit, with rifle at (-0.1748897 3.923505 19.85716) using aim style 0,3
+20:26.8,Missed target,,3
+20:27.4,Destroyed, linear motion at (-0.0003885329 5.647136 30.62685),3
+20:27.4,Hit, with rifle at (-0.0471932 5.536548 30.61752) using aim style 0,3
+20:29.4,Destroyed, linear motion at (-0.06301498 4.345408 30.05242),3
+20:29.4,Hit, with rifle at (-0.06842926 4.336583 30.02818) using aim style 0,3
+20:32.6,Missed target,,3
+20:34.6,Destroyed, linear motion at (-0.00114727 5.828299 10.85654),3
+20:34.6,Hit, with rifle at (-0.1305944 5.857907 10.81689) using aim style 0,3
+20:37.4,Destroyed, linear motion at (6.351919 3.826809 8.340929),3
+20:37.4,Hit, with rifle at (5.961259 3.984396 8.554545) using aim style 0,3
+20:48.0,Destroyed, Cube (1) at (-0.0005644233 3.035241 10.20086),3
+20:48.0,Hit, with pistol at (-0.2792236 3.193863 10.14687) using aim style 0,3
+20:51.6,Destroyed, Cube (2) at (-8.087717 3.019441 10.11034),3
+20:51.6,Hit, with pistol at (-7.784383 3.038178 10.31594) using aim style 0,3
+20:57.8,Destroyed, Cube (3) at (8.104477 3.023371 10.13249),3
+20:57.8,Hit, with pistol at (8.019902 3.107808 10.15214) using aim style 0,3
+21:01.0,Missed target,,3
+21:01.5,Missed target,,3
+21:02.0,Destroyed, cricular motion at (1.525145 2.690326 19.96169),3
+21:02.0,Hit, with pistol at (1.42408 2.864998 19.93125) using aim style 0,3
+21:04.9,Missed target,,3
+21:06.9,Missed target,,3
+21:07.4,Missed target,,3
+21:08.1,Missed target,,3
+21:09.5,Missed target,,3
+21:10.0,Missed target,,3
+21:10.4,Missed target,,3
+21:12.2,Missed target,,3
+21:13.0,Missed target,,3
+21:13.6,Missed target,,3
+21:14.6,Missed target,,3
+21:15.0,Destroyed, linear motion at (-0.004180193 5.639148 10.96969),3
+21:15.0,Hit, with pistol at (-0.2453547 5.272104 11.0874) using aim style 0,3
+21:17.9,Destroyed, cricular motion at (-0.0251619 4.079495 9.846881),3
+21:17.9,Hit, with pistol at (-0.4693092 4.347227 9.741058) using aim style 0,3
+21:20.3,Missed target,,3
+21:20.9,Destroyed, linear motion at (-2.396793 4.217609 9.604266),3
+21:20.9,Hit, with pistol at (-2.222119 3.744489 9.76748) using aim style 0,3
+21:23.2,Missed target,,3
+21:24.0,Missed target,,3
+21:24.6,Missed target,,3
+21:24.9,Missed target,,3
+21:25.6,Missed target,,3
+21:26.5,Destroyed, linear motion at (0.000133276 9.306297 29.8775),3
+21:26.5,Hit, with pistol at (-0.4791836 9.180218 29.88512) using aim style 0,3
+21:29.1,Destroyed, cricular motion at (-1.486302 2.538355 29.95198),3
+21:29.1,Hit, with pistol at (-1.795932 2.083859 29.93129) using aim style 0,3
+21:29.6,Missed target,,3
+21:31.5,Destroyed, linear motion at (-5.198421 4.281616 29.43716),3
+21:31.5,Hit, with pistol at (-5.196073 3.959501 29.44545) using aim style 0,3
+21:33.9,Missed target,,3
+21:34.4,Missed target,,3
+21:34.8,Missed target,,3
+21:35.5,Missed target,,3
+21:36.8,Missed target,,3
+21:37.5,Destroyed, linear motion at (-0.0002213717 3.408746 20.11348),3
+21:37.5,Hit, with pistol at (-0.1196963 3.863582 20.03868) using aim style 0,3
+21:40.7,Missed target,,3
+21:41.2,Missed target,,3
+21:41.7,Missed target,,3
+21:42.5,Missed target,,3
+21:43.2,Missed target,,3
+21:43.6,Missed target,,3
+21:45.1,Missed target,,3
+21:45.6,Missed target,,3
+21:46.2,Destroyed, linear motion at (-3.385012 4.314943 19.83962),3
+21:46.2,Hit, with pistol at (-3.740692 4.247156 19.76332) using aim style 0,3
+24:16.1,Destroyed, Cube (1) at (-0.0007548265 3.049553 10.27977),3
+24:16.1,Hit, with pistol at (-0.09050054 2.990122 10.26466) using aim style 1,3
+24:20.4,Destroyed, Cube (2) at (-8.133715 3.029686 10.16791),3
+24:20.4,Hit, with pistol at (-8.138827 3.017338 10.13376) using aim style 1,3
+24:23.4,Destroyed, Cube (3) at (8.131276 3.029188 10.16575),3
+24:23.4,Hit, with pistol at (8.141356 2.893644 10.14944) using aim style 1,3
+24:25.7,Missed target,,3
+24:26.2,Destroyed, cricular motion at (1.415909 3.188983 10.02598),3
+24:26.2,Hit, with pistol at (1.3875 3.06623 10.02809) using aim style 1,3
+24:28.4,Destroyed, linear motion at (-0.000259161 5.920753 30.3304),3
+24:28.4,Hit, with pistol at (0.09185681 5.539426 30.36405) using aim style 1,3
+24:30.8,Missed target,,3
+24:31.5,Destroyed, linear motion at (6.820621 4.272571 29.34774),3
+24:31.5,Hit, with pistol at (6.424075 4.470453 29.39299) using aim style 1,3
+24:34.1,Destroyed, linear motion at (0.8270187 4.309175 9.900495),3
+24:34.1,Hit, with pistol at (0.8445281 4.59921 9.783118) using aim style 1,3
+24:36.7,Missed target,,3
+24:37.3,Missed target,,3
+24:37.8,Destroyed, cricular motion at (-1.317496 1.914355 30.1903),3
+24:37.8,Hit, with pistol at (-1.15193 2.253022 30.16502) using aim style 1,3
+24:40.1,Destroyed, cricular motion at (1.145568 3.602587 19.95913),3
+24:40.1,Hit, with pistol at (0.8613248 3.364821 19.97784) using aim style 1,3
+24:42.8,Destroyed, linear motion at (-2.217293E-05 4.547729 20.01527),3
+24:42.8,Hit, with pistol at (0.08696488 4.736351 19.9589) using aim style 1,3
+24:45.6,Destroyed, linear motion at (2.426928 4.308819 19.79924),3
+24:45.6,Hit, with pistol at (2.454659 4.246942 19.78002) using aim style 1,3
+24:49.5,Destroyed, linear motion at (-0.0001726151 6.178402 10.05831),3
+24:49.5,Hit, with pistol at (0.007336541 6.245424 9.99779) using aim style 1,3
+24:58.7,Destroyed, Cube (1) at (-0.0008662657 3.031276 10.17845),3
+24:58.8,Hit, with rifle at (0.006187115 3.011404 10.15659) using aim style 1,3
+25:02.4,Destroyed, Cube (2) at (-8.091563 3.020271 10.11436),3
+25:02.4,Hit, with rifle at (-8.066129 2.961354 10.11283) using aim style 1,3
+25:05.2,Destroyed, Cube (3) at (8.096091 3.021375 10.1211),3
+25:05.2,Hit, with rifle at (8.028754 2.978438 10.14989) using aim style 1,3
+25:07.7,Missed target,,3
+25:08.6,Destroyed, cricular motion at (-0.1876794 1.127046 10.2648),3
+25:08.6,Hit, with rifle at (-0.5565085 1.054372 10.2305) using aim style 1,3
+25:11.1,Destroyed, linear motion at (-0.001038075 3.176094 20.44126),3
+25:11.1,Hit, with rifle at (-0.2168872 3.549475 20.3801) using aim style 1,3
+25:13.9,Destroyed, cricular motion at (-1.059056 3.674855 30.0703),3
+25:13.9,Hit, with rifle at (-0.9949536 3.884572 30.03048) using aim style 1,3
+25:16.8,Missed target,,3
+25:18.3,Destroyed, linear motion at (0.002029658 7.303744 9.33624),3
+25:18.3,Hit, with rifle at (-0.08193994 7.69936 9.053534) using aim style 1,3
+25:21.4,Destroyed, linear motion at (-3.23366 4.319392 19.86724),3
+25:21.4,Hit, with rifle at (-3.640211 4.083514 19.81162) using aim style 1,3
+25:23.7,Destroyed, linear motion at (-0.2606497 4.345856 30.0569),3
+25:23.7,Hit, with rifle at (-0.4917137 4.542488 30.00916) using aim style 1,3
+25:25.9,Destroyed, cricular motion at (1.003572 3.730631 19.89766),3
+25:25.9,Hit, with rifle at (0.6906511 3.748272 19.88552) using aim style 1,3
+25:28.4,Destroyed, linear motion at (-5.197526E-05 8.558507 30.0731),3
+25:28.4,Hit, with rifle at (-0.2777268 8.127071 30.15207) using aim style 1,3
+25:31.9,Destroyed, linear motion at (-1.969266 4.385814 10.1482),3
+25:31.9,Hit, with rifle at (-2.314699 4.177086 10.11845) using aim style 1,3
+11:32.5,Destroyed, Cube (1) at (0.002073372 3.056228 10.31823),3
+11:32.5,Hit, with pistol at (-0.02047722 3.135072 10.27906) using aim style 2,3
+11:37.4,Destroyed, Cube (2) at (-8.19708 3.044121 10.24831),3
+11:37.4,Hit, with pistol at (-8.164581 3.027826 10.24478) using aim style 2,3
+11:42.2,Destroyed, Cube (3) at (8.147695 3.032513 10.18385),3
+11:42.2,Hit, with pistol at (8.106063 3.034513 10.18457) using aim style 2,3
+11:48.9,Destroyed, linear motion at (0.007931293 4.697465 11.4428),3
+11:48.9,Hit, with pistol at (-0.0267381 5.006772 11.32359) using aim style 2,3
+11:51.8,Missed target,,3
+11:52.7,Destroyed, linear motion at (5.642283 4.007477 8.9262),3
+11:52.7,Hit, with pistol at (5.477539 4.278303 8.916504) using aim style 2,3
+11:56.2,Missed target,,3
+11:58.1,Destroyed, cricular motion at (0.8255984 1.390952 30.26044),3
+11:58.1,Hit, with pistol at (0.5874828 1.622033 30.24137) using aim style 2,3
+12:01.1,Destroyed, linear motion at (4.158586 4.305839 19.77911),3
+12:01.1,Hit, with pistol at (4.529756 3.840283 19.74638) using aim style 2,3
+12:04.3,Destroyed, cricular motion at (-0.5444521 4.027219 19.95832),3
+12:04.3,Hit, with pistol at (-0.9272285 3.960244 19.93311) using aim style 2,3
+12:06.9,Destroyed, linear motion at (0.001426801 5.700779 30.71193),3
+12:06.9,Hit, with pistol at (-0.09308767 5.234226 30.75454) using aim style 2,3
+12:09.3,Destroyed, linear motion at (0.001189232 4.17538 20.3924),3
+12:09.3,Hit, with pistol at (-0.0234325 4.069819 20.38238) using aim style 2,3
+12:12.2,Destroyed, cricular motion at (1.371202 1.941262 10.63891),3
+12:12.2,Hit, with pistol at (1.262731 2.023519 10.62282) using aim style 2,3
+12:14.9,Destroyed, linear motion at (2.605267 4.342095 30.02067),3
+12:14.9,Hit, with pistol at (2.11181 4.426186 30.03063) using aim style 2,3
+12:29.7,Destroyed, Cube (1) at (-5.729834E-05 3.02226 10.12886),3
+12:29.7,Hit, with rifle at (-0.0003913426 2.994471 10.10829) using aim style 2,3
+12:34.7,Destroyed, Cube (2) at (-8.091653 3.020298 10.11541),3
+12:34.7,Hit, with rifle at (-8.064123 2.934343 10.12017) using aim style 2,3
+12:40.2,Destroyed, Cube (3) at (8.055737 3.012229 10.07019),3
+12:40.2,Hit, with rifle at (8.08177 2.955727 10.02714) using aim style 2,3
+12:43.6,Missed target,,3
+12:44.3,Destroyed, cricular motion at (0.3904812 4.078498 20.02513),3
+12:44.3,Hit, with rifle at (0.5197309 3.645261 20.05853) using aim style 2,3
+12:46.7,Destroyed, linear motion at (5.364418E-06 4.25515 20.22641),3
+12:46.7,Hit, with rifle at (0.1529452 4.638319 20.14423) using aim style 2,3
+12:49.8,Destroyed, linear motion at (-1.315325 4.260152 9.739158),3
+12:49.8,Hit, with rifle at (-1.265457 4.401613 9.676136) using aim style 2,3
+12:52.8,Missed target,,3
+12:53.5,Destroyed, cricular motion at (0.1059063 4.07734 9.796934),3
+12:53.5,Hit, with rifle at (-0.1501822 4.171859 9.74725) using aim style 2,3
+12:56.3,Destroyed, cricular motion at (1.320336 1.911677 30.09435),3
+12:56.3,Hit, with rifle at (1.390082 1.965065 30.06502) using aim style 2,3
+13:00.4,Destroyed, linear motion at (0.001458079 4.39672 10.64552),3
+13:00.4,Hit, with rifle at (-0.01142759 4.059569 10.71817) using aim style 2,3
+13:02.7,Missed target,,3
+13:03.4,Missed target,,3
+13:04.5,Missed target,,3
+13:05.5,Missed target,,3
+13:06.5,Destroyed, linear motion at (0.0002604723 6.931358 30.37538),3
+13:06.5,Hit, with rifle at (-0.4157284 6.88943 30.35806) using aim style 2,3
+13:09.5,Missed target,,3
+13:10.3,Missed target,,3
+13:11.9,Missed target,,3
+13:12.7,Destroyed, linear motion at (0.2577748 4.354296 20.09233),3
+13:12.7,Hit, with rifle at (0.4003898 4.192499 20.09034) using aim style 2,3
+13:15.6,Destroyed, linear motion at (-6.653168 4.251024 29.14425),3
+13:15.6,Hit, with rifle at (-6.377048 4.052155 29.20158) using aim style 2,3
+17:04.5,Ended session,,3
