@@ -52,3 +52,11 @@ def create_box_plot(time_df):
     plt.ylim(time_df['TimeDiff'].quantile(0.00), time_df['TimeDiff'].quantile(0.98))
 
     plt.show()
+
+def plot_histograms(df, metric, title):
+    plt.figure(figsize=(10, 6))
+    sns.histplot(data=df, x=metric, hue='Combination', kde=True, palette='viridis')
+    plt.title(f'Distribution of {title} Averages')
+    plt.xlabel(title)
+    plt.ylabel('Frequency')
+    plt.show()

@@ -2,11 +2,17 @@ import pandas as pd
 import numpy as np
 import sys
 import os
-from scipy.stats import f_oneway, shapiro
+from scipy.stats import f_oneway, shapiro, kruskal
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from media import *
+from statsmodels.stats.multitest import multipletests
+from scikit_posthocs import posthoc_dunn
+from cliffs_delta import cliffs_delta
+import itertools
+
+session = 1
 
 def parse_position(position):
     if pd.isna(position):
@@ -15,10 +21,12 @@ def parse_position(position):
     return (x, y, z)
 
 def calculate_accuracy_df(df):
-    # Create a new DataFrame with Gun, AimStyle, and Hit (True/False)
+# Create a new DataFrame with Gun, AimStyle, and Hit (True/False)
     hit_df = df[df['InitiatedAction'].isin(['Hit', 'Missed target'])].copy()
     hit_df['Hit'] = hit_df['InitiatedAction'] == 'Hit'
-    hit_df = hit_df[['Gun', 'AimStyle', 'Hit']]
+    hit_df = hit_df[['Gun', 'AimStyle', 'Hit', 'UniqueTestID']]
+
+    global session
 
     # Calculate Accuracy
     destroyed_counts = df[df['InitiatedAction'] == 'Destroyed'].groupby(['AimStyle', 'Gun']).size().reset_index(name='destroyed')
@@ -29,6 +37,8 @@ def calculate_accuracy_df(df):
 
     # Calculate accuracy
     accuracy_df['accuracy'] = accuracy_df['destroyed'] / (accuracy_df['destroyed'] + accuracy_df['missed'])
+    accuracy_df['session'] = session
+    print(session)
 
     # print("Average Accuracy by AimStyle and Gun:")
     # print(accuracy_df[['AimStyle', 'Gun', 'accuracy']])
@@ -69,7 +79,8 @@ def calculate_distance_df(df):
                     'Gun': hit_row['Gun'].iloc[0],
                     'distance': distance,
                     'pos_hit': (x_hit, y_hit, z_hit),
-                    'pos_destroyed': (x_destroyed, y_destroyed, z_destroyed)
+                    'pos_destroyed': (x_destroyed, y_destroyed, z_destroyed),
+                    'UniqueTestID': group['UniqueTestID'] 
                 })
     
     # Create a DataFrame for distances
@@ -114,7 +125,8 @@ def calculate_avg_time_to_destroy_df(df):
             time_differences.append({
                 'Gun': gun,
                 'AimStyle': aim_style,
-                'TimeDiff': time_diff
+                'TimeDiff': time_diff,
+                'UniqueTestID': pairs[i]['UniqueTestID']
             })
 
     # Create a DataFrame from the time differences
@@ -148,7 +160,7 @@ def calculate_anova(df, metric):
     
     for i, group in enumerate(groups):
         stat, p = shapiro(group)
-        print(f"Shapiro-Wilk Test for {combo[i]}: Stat={stat}, p={p}")
+        print(f"Shapiro-Wilk Test for {combo[i].capitalize()}: Stat={stat:.4f}, p={round(p, 4)}")
 
     f_stat, p_value = f_oneway(*groups)
     print(f"{metric.capitalize()} - F-statistic: {f_stat:.4f}, P-value: {p_value:.4f}")
@@ -172,8 +184,16 @@ def main():
             filepath = os.path.join(directory, filename)
             print(f"Processing {filename}...")
 
+            global session
+            session = int(filename.replace(".csv", "").replace("session", ""))
+
+            print(f'\n\n\n session = {session}\n\n\n')
+
             # Load the session data
             df = pd.read_csv(filepath)
+
+            df['UniqueTestID'] = filename.replace(".csv", "").replace("session", "") + '_' + df['TestID'].astype(str)
+
             df[['x', 'y', 'z']] = df['Position'].apply(parse_position).apply(pd.Series)
 
             # Calculate metrics for the current session
@@ -187,41 +207,58 @@ def main():
             combined_distance_df = pd.concat([combined_distance_df, distance_df], ignore_index=True)
             combined_time_diff_df = pd.concat([combined_time_diff_df, time_diff_df], ignore_index=True)
 
-    # Calculate combined averages
+    # Aggregate combined data
     combined_accuracy_avg = combined_accuracy_df.groupby(['AimStyle', 'Gun'])['accuracy'].mean().reset_index()
     combined_distance_avg = combined_distance_df.groupby(['AimStyle', 'Gun'])['distance'].mean().reset_index()
     combined_time_avg = combined_time_diff_df.groupby(['AimStyle', 'Gun'])['TimeDiff'].mean().reset_index()
 
-    combined_df = pd.merge(combined_accuracy_avg, combined_distance_avg, on=['AimStyle', 'Gun'], suffixes=('_accuracy', '_distance'))
-
-    combined_df = pd.merge(combined_df, combined_time_avg, on=['AimStyle', 'Gun'])
-
-    combined_df.rename(columns={'TimeDiff': 'TimeDiff_avg'}, inplace=True)
-
-    print(combined_df)
-
-    # Perform ANOVA and Tukey's HSD on the combined data
-    print("\nANOVA for Combined Accuracy:")
-    calculate_anova(combined_hit_df, 'Hit')
-
-    print("\nANOVA for Combined Distance to Bullseye:")
-    calculate_anova(combined_distance_df, 'distance')
-
-    print("\nANOVA for Combined Time to Destroy:")
-    calculate_anova(combined_time_diff_df, 'TimeDiff')
-
-    # Perform Tukey's HSD for accuracy
-    tukey_data = combined_hit_df[['Gun', 'AimStyle', 'Hit']]
-    tukey_data['Combination'] = tukey_data['Gun'] + '-' + tukey_data['AimStyle']
-
-    print("\nTukey's HSD for Combined Accuracy:")
-    tukey_results = pairwise_tukeyhsd(tukey_data['Hit'], tukey_data['Combination'])
-    print(tukey_results)
-
+    print(combined_accuracy_df)
 
     # create_heatmaps(combined_distance_df)
 
-    create_box_plot(combined_time_diff_df)
+    # create_box_plot(combined_time_diff_df)
+
+    # Group accuracies by AimStyle
+    data = combined_accuracy_df
+    line_accuracies = data[data['AimStyle'] == 'LINE']['accuracy']
+    sphere_accuracies = data[data['AimStyle'] == 'SPHERE']['accuracy']
+    no_aim_accuracies = data[data['AimStyle'] == 'NO_AIM']['accuracy']
+
+# Perform Kruskal-Wallis test
+    stat, p_value = kruskal(line_accuracies, sphere_accuracies, no_aim_accuracies)
+
+    print(f"Kruskal-Wallis H-statistic: {stat}")
+    print(f"P-value: {p_value}")
+
+    if p_value < 0.05:
+        print("Reject the null hypothesis: At least one aim style is significantly different.")
+        posthoc = posthoc_dunn(data, val_col='accuracy', group_col='AimStyle', p_adjust='bonferroni')
+
+        print(f"posthoc dunn:\n{posthoc}")
+
+        line_accuracies = combined_accuracy_df[combined_accuracy_df['AimStyle'] == 'LINE']['accuracy']
+        no_aim_accuracies = combined_accuracy_df[combined_accuracy_df['AimStyle'] == 'NO_AIM']['accuracy']
+        sphere_accuracies = combined_accuracy_df[combined_accuracy_df['AimStyle'] == 'SPHERE']['accuracy']
+
+# Calculate Cliff's delta for all pairwise comparisons
+        aim_styles = {
+            'LINE': line_accuracies,
+            'NO_AIM': no_aim_accuracies,
+            'SPHERE': sphere_accuracies
+        }
+
+        cliffs_results = {}
+        for (aim1, acc1), (aim2, acc2) in itertools.combinations(aim_styles.items(), 2):
+            delta, size = cliffs_delta(acc1, acc2)
+            cliffs_results[f"{aim1} vs {aim2}"] = (delta, size)
+
+        print("Cliffs Delta results:")
+        for k, v in cliffs_results.items():
+            print(f"{k}: {v}")
+    else:
+        print("Fail to reject the null hypothesis: No significant difference between aim styles.")
+
+
 
 if __name__ == '__main__':
     main()

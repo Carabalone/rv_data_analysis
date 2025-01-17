@@ -1,0 +1,70 @@
+Processing session1.csv...
+Processing session2.csv...
+Processing session3.csv...
+Processing session4.csv...
+Processing session5.csv...
+Processing session6.csv...
+Processing session7.csv...
+Processing session8.csv...
+Processing session9.csv...
+  AimStyle     Gun  accuracy  distance  TimeDiff_avg
+0     LINE  PISTOL  0.741623  0.229698      3.648387
+1     LINE   RIFLE  0.745041  0.276347      4.905882
+2   NO_AIM  PISTOL  0.488210  0.325329      6.001124
+3   NO_AIM   RIFLE  0.528857  0.291725      4.614737
+4   SPHERE  PISTOL  0.777615  0.241265      3.700000
+5   SPHERE   RIFLE  0.702068  0.265935      4.692929
+
+ANOVA for Combined Accuracy:
+
+Hit/Misses {
+    Shapiro-Wilk Test for Rifle line: Stat=0.5652, p=0.0
+    Shapiro-Wilk Test for Rifle sphere: Stat=0.6198, p=0.0
+    Shapiro-Wilk Test for Rifle noaim: Stat=0.6336, p=0.0
+    Shapiro-Wilk Test for Pistol line: Stat=0.5630, p=0.0
+    Shapiro-Wilk Test for Pistol sphere: Stat=0.5588, p=0.0
+    Shapiro-Wilk Test for Pistol noaim: Stat=0.5883, p=0.0
+}
+
+Hit - F-statistic: 26.4209, P-value: 0.0000
+
+Shapiro-Wilk Test for Rifle line: Stat=0.9577, p=0.0024
+Shapiro-Wilk Test for Rifle sphere: Stat=0.9604, p=0.0043
+Shapiro-Wilk Test for Rifle noaim: Stat=0.9705, p=0.0202
+Shapiro-Wilk Test for Pistol line: Stat=0.9557, p=0.0018
+Shapiro-Wilk Test for Pistol sphere: Stat=0.9528, p=0.0009
+Shapiro-Wilk Test for Pistol noaim: Stat=0.9640, p=0.0144
+
+Distance - F-statistic: 5.1603, P-value: 0.0001
+
+ANOVA for Combined Time to Destroy:
+Shapiro-Wilk Test for Rifle line: Stat=0.4838, p=0.0
+Shapiro-Wilk Test for Rifle sphere: Stat=0.7159, p=0.0
+Shapiro-Wilk Test for Rifle noaim: Stat=0.6660, p=0.0
+Shapiro-Wilk Test for Pistol line: Stat=0.8240, p=0.0
+Shapiro-Wilk Test for Pistol sphere: Stat=0.8022, p=0.0
+Shapiro-Wilk Test for Pistol noaim: Stat=0.5170, p=0.0
+
+Timediff - F-statistic: 4.7810, P-value: 0.0003
+
+Tukey's HSD for Combined Accuracy:
+       Multiple Comparison of Means - Tukey HSD, FWER=0.05        
+==================================================================
+    group1        group2    meandiff p-adj   lower   upper  reject
+------------------------------------------------------------------
+  PISTOL-LINE PISTOL-NO_AIM   -0.397    0.0 -0.5359 -0.2581   True
+  PISTOL-LINE PISTOL-SPHERE   0.0058    1.0 -0.1531  0.1647  False
+  PISTOL-LINE    RIFLE-LINE   -0.003    1.0 -0.1622  0.1561  False
+  PISTOL-LINE  RIFLE-NO_AIM  -0.2622    0.0  -0.406 -0.1183   True
+  PISTOL-LINE  RIFLE-SPHERE  -0.1122 0.2985 -0.2663  0.0418  False
+PISTOL-NO_AIM PISTOL-SPHERE   0.4028    0.0  0.2649  0.5408   True
+PISTOL-NO_AIM    RIFLE-LINE    0.394    0.0  0.2557  0.5322   True
+PISTOL-NO_AIM  RIFLE-NO_AIM   0.1348 0.0178  0.0145  0.2552   True
+PISTOL-NO_AIM  RIFLE-SPHERE   0.2848    0.0  0.1524  0.4171   True
+PISTOL-SPHERE    RIFLE-LINE  -0.0089    1.0 -0.1672  0.1495  False
+PISTOL-SPHERE  RIFLE-NO_AIM   -0.268    0.0  -0.411  -0.125   True
+PISTOL-SPHERE  RIFLE-SPHERE  -0.1181 0.2384 -0.2713  0.0351  False
+   RIFLE-LINE  RIFLE-NO_AIM  -0.2591    0.0 -0.4024 -0.1159   True
+   RIFLE-LINE  RIFLE-SPHERE  -0.1092 0.3251 -0.2627  0.0443  False
+ RIFLE-NO_AIM  RIFLE-SPHERE   0.1499 0.0234  0.0124  0.2875   True
+------------------------------------------------------------------
