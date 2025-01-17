@@ -21,21 +21,17 @@ def parse_position(position):
     return (x, y, z)
 
 def calculate_accuracy_df(df):
-# Create a new DataFrame with Gun, AimStyle, and Hit (True/False)
     hit_df = df[df['InitiatedAction'].isin(['Hit', 'Missed target'])].copy()
     hit_df['Hit'] = hit_df['InitiatedAction'] == 'Hit'
     hit_df = hit_df[['Gun', 'AimStyle', 'Hit', 'UniqueTestID']]
 
     global session
 
-    # Calculate Accuracy
     destroyed_counts = df[df['InitiatedAction'] == 'Destroyed'].groupby(['AimStyle', 'Gun']).size().reset_index(name='destroyed')
     missed_counts = df[df['InitiatedAction'] == 'Missed target'].groupby(['AimStyle', 'Gun']).size().reset_index(name='missed')
 
-    # Combine counts
     accuracy_df = pd.merge(destroyed_counts, missed_counts, on=['AimStyle', 'Gun'], how='outer').fillna(0)
 
-    # Calculate accuracy
     accuracy_df['accuracy'] = accuracy_df['destroyed'] / (accuracy_df['destroyed'] + accuracy_df['missed'])
     accuracy_df['session'] = session
 
@@ -44,35 +40,29 @@ def calculate_accuracy_df(df):
     return hit_df, accuracy_df
 
 def calculate_distance_df(df):
-    # Apply the function and create new columns
     df[['x', 'y', 'z']] = df['Position'].apply(parse_position).apply(pd.Series)
     
-    # Filter the DataFrame to include only "Hit" and "Destroyed" actions
     hit_destroyed = df[df['InitiatedAction'].isin(['Hit', 'Destroyed'])]
     
-    # Group by TestID and Timestamp
     groups = hit_destroyed.groupby(['TestID', 'Timestamp'])
     
-    # Initialize a list to hold distances
     distances = []
     
     for name, group in groups:
-        # Check if there is exactly one "Hit" and one "Destroyed"
         if len(group) == 2:
             actions = group['InitiatedAction'].tolist()
             if 'Hit' in actions and 'Destroyed' in actions:
-                # Get the positions
+
                 hit_row = group[group['InitiatedAction'] == 'Hit']
                 destroyed_row = group[group['InitiatedAction'] == 'Destroyed']
-                # Extract x, y, z
+
                 x_hit, y_hit, z_hit = hit_row[['x', 'y', 'z']].values[0]
                 x_destroyed, y_destroyed, z_destroyed = destroyed_row[['x', 'y', 'z']].values[0]
-                # Check for missing values
+
                 if None in [x_hit, y_hit, z_hit, x_destroyed, y_destroyed, z_destroyed]:
                     continue
-                # Calculate distance
+
                 distance = np.sqrt((x_hit - x_destroyed)**2 + (y_hit - y_destroyed)**2 + (z_hit - z_destroyed)**2)
-                # Append to distances list
                 distances.append({
                     'AimStyle': hit_row['AimStyle'].iloc[0],
                     'Gun': hit_row['Gun'].iloc[0],
@@ -82,10 +72,8 @@ def calculate_distance_df(df):
                     'UniqueTestID': group['UniqueTestID'] 
                 })
     
-    # Create a DataFrame for distances
     distance_df = pd.DataFrame(distances)
     
-    # Calculate average distance per AimStyle and Gun
     avg_distance = distance_df.groupby(['AimStyle', 'Gun'])['distance'].mean().reset_index()
     
     # print("\nAverage Distance to Bullseye by AimStyle and Gun:")
@@ -93,32 +81,24 @@ def calculate_distance_df(df):
     return distance_df, avg_distance
 
 def calculate_avg_time_to_destroy_df(df):
-    # Initialize a list to store time differences
     time_differences = []
 
-    # Iterate over each test (TestID)
     for test_id in df['TestID'].unique():
-        # Filter the DataFrame for the current test
         test_df = df[df['TestID'] == test_id]
 
-        # Group by Timestamp and filter pairs of "Hit" and "Destroyed"
         grouped = test_df.groupby('Timestamp')
         pairs = []
         for timestamp, group in grouped:
             if len(group) == 2 and set(group['InitiatedAction']) == {'Hit', 'Destroyed'}:
                 pairs.append(group)
 
-        # Sort pairs by ElapsedTime
         pairs.sort(key=lambda x: x['ElapsedTime'].iloc[0])
 
-        # Use the first pair as a baseline (skip it for time calculation)
         for i in range(1, len(pairs)):
-            # Calculate the time difference between the current pair and the previous pair
             current_time = pairs[i]['ElapsedTime'].iloc[0]
             previous_time = pairs[i - 1]['ElapsedTime'].iloc[0]
             time_diff = current_time - previous_time
 
-            # Append the time difference along with Gun and AimStyle
             gun = pairs[i]['Gun'].iloc[0]
             aim_style = pairs[i]['AimStyle'].iloc[0]
             time_differences.append({
@@ -128,10 +108,8 @@ def calculate_avg_time_to_destroy_df(df):
                 'UniqueTestID': pairs[i]['UniqueTestID']
             })
 
-    # Create a DataFrame from the time differences
     time_diff_df = pd.DataFrame(time_differences)
 
-    # Calculate the average time difference per Gun and AimStyle combo
     avg_time_df = time_diff_df.groupby(['Gun', 'AimStyle'])['TimeDiff'].mean().reset_index()
 
     # print(f"Average Time to Destroy:\n{avg_time_df}")
@@ -144,13 +122,11 @@ def main():
 
     directory = sys.argv[1]
 
-    # Initialize empty DataFrames to store combined data
     combined_hit_df = pd.DataFrame()
     combined_distance_df = pd.DataFrame()
     combined_time_diff_df = pd.DataFrame()
     combined_accuracy_df = pd.DataFrame()
 
-    # Iterate over all session files in the directory
     for filename in os.listdir(directory):
         if filename.endswith(".csv"):
             filepath = os.path.join(directory, filename)
@@ -159,34 +135,25 @@ def main():
             global session
             session = int(filename.replace(".csv", "").replace("session", ""))
 
-            # Load the session data
             df = pd.read_csv(filepath)
 
             df['UniqueTestID'] = filename.replace(".csv", "").replace("session", "") + '_' + df['TestID'].astype(str)
 
             df[['x', 'y', 'z']] = df['Position'].apply(parse_position).apply(pd.Series)
 
-            # Calculate metrics for the current session
             hit_df, accuracy_df = calculate_accuracy_df(df)
             distance_df, avg_distance_df = calculate_distance_df(df)
             time_diff_df, avg_time_df = calculate_avg_time_to_destroy_df(df)
 
-            # Append the data to the combined DataFrames
             combined_accuracy_df = pd.concat([combined_accuracy_df, accuracy_df], ignore_index=True)
             combined_hit_df = pd.concat([combined_hit_df, hit_df], ignore_index=True)
             combined_distance_df = pd.concat([combined_distance_df, distance_df], ignore_index=True)
             combined_time_diff_df = pd.concat([combined_time_diff_df, time_diff_df], ignore_index=True)
 
-    # Aggregate combined data
     combined_accuracy_avg = combined_accuracy_df.groupby(['AimStyle', 'Gun'])['accuracy'].mean().reset_index()
     combined_distance_avg = combined_distance_df.groupby(['AimStyle', 'Gun'])['distance'].mean().reset_index()
     combined_time_avg = combined_time_diff_df.groupby(['AimStyle', 'Gun'])['TimeDiff'].mean().reset_index()
 
-    # create_heatmaps(combined_distance_df)
-
-    # create_box_plot(combined_time_diff_df)
-
-    # Group accuracies by AimStyle
     data = combined_accuracy_df
     line_accuracies = data[data['AimStyle'] == 'LINE']['accuracy']
     sphere_accuracies = data[data['AimStyle'] == 'SPHERE']['accuracy']
@@ -208,7 +175,7 @@ def main():
 
     print("\n")
 
-# Perform Kruskal-Wallis test
+    # Perform Kruskal-Wallis test
     stat, p_value = kruskal(line_accuracies, sphere_accuracies, no_aim_accuracies)
 
     print("We can conclude that the data is not normally distributed \n")
@@ -222,7 +189,6 @@ def main():
 
         print(f"posthoc dunn:\n{posthoc}")
 
-# Calculate Cliff's delta for all pairwise comparisons
         aim_styles = {
             'LINE': line_accuracies,
             'NO_AIM': no_aim_accuracies,
@@ -240,6 +206,15 @@ def main():
     else:
         print("Fail to reject the null hypothesis: No significant difference between aim styles.")
 
+
+    create_heatmaps(combined_distance_df)
+
+    create_box_plot(combined_time_diff_df)
+
+    combined_df = pd.merge(combined_accuracy_avg, combined_distance_avg, on=['AimStyle', 'Gun'])
+    combined_df = pd.merge(combined_df, combined_time_avg, on=['AimStyle', 'Gun'])
+
+    print(combined_df)
 
 
 if __name__ == '__main__':
