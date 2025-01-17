@@ -4,13 +4,21 @@
 The project is organized as follows:
 .
 ├── funcs.py
+
 ├── imgs/
+
 ├── main.py
+
 ├── media.py
+
 ├── normalize.py
+
 ├── processed\_data/
+
 ├── raw\_data/
+
 └── tmp/
+
 
 ## Data Collection and Normalization
 
@@ -46,6 +54,8 @@ Some manual adjustments were required for unmatched hit/destroy pairs and missin
 
 - Removing unmatched hit/destroy pairs.
 - Adding missing Gun and AimStyle information for "Missed" actions.
+
+Given this, we recommend the utilization of the processed data in the processed_data folder for reproducing our work.
 
 ## Analysis in main.py
 
