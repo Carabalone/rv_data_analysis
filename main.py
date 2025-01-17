@@ -38,7 +38,6 @@ def calculate_accuracy_df(df):
     # Calculate accuracy
     accuracy_df['accuracy'] = accuracy_df['destroyed'] / (accuracy_df['destroyed'] + accuracy_df['missed'])
     accuracy_df['session'] = session
-    print(session)
 
     # print("Average Accuracy by AimStyle and Gun:")
     # print(accuracy_df[['AimStyle', 'Gun', 'accuracy']])
@@ -138,33 +137,6 @@ def calculate_avg_time_to_destroy_df(df):
     # print(f"Average Time to Destroy:\n{avg_time_df}")
     return time_diff_df, avg_time_df
 
-def calculate_anova(df, metric):
-    groups = [
-        df[(df['Gun'] == 'RIFLE') & (df['AimStyle'] == 'LINE')][metric],
-        df[(df['Gun'] == 'RIFLE') & (df['AimStyle'] == 'SPHERE')][metric],
-        df[(df['Gun'] == 'RIFLE') & (df['AimStyle'] == 'NO_AIM')][metric],
-        df[(df['Gun'] == 'PISTOL') & (df['AimStyle'] == 'LINE')][metric],
-        df[(df['Gun'] == 'PISTOL') & (df['AimStyle'] == 'SPHERE')][metric],
-        df[(df['Gun'] == 'PISTOL') & (df['AimStyle'] == 'NO_AIM')][metric]
-    ]
-
-
-    combo = [
-        'rifle line',
-        'rifle sphere',
-        'rifle noaim',
-        'pistol line',
-        'pistol sphere',
-        'pistol noaim'
-    ]
-    
-    for i, group in enumerate(groups):
-        stat, p = shapiro(group)
-        print(f"Shapiro-Wilk Test for {combo[i].capitalize()}: Stat={stat:.4f}, p={round(p, 4)}")
-
-    f_stat, p_value = f_oneway(*groups)
-    print(f"{metric.capitalize()} - F-statistic: {f_stat:.4f}, P-value: {p_value:.4f}")
-
 def main():
     if len(sys.argv) < 2:
         print("Provide directory containing session files")
@@ -186,8 +158,6 @@ def main():
 
             global session
             session = int(filename.replace(".csv", "").replace("session", ""))
-
-            print(f'\n\n\n session = {session}\n\n\n')
 
             # Load the session data
             df = pd.read_csv(filepath)
@@ -212,8 +182,6 @@ def main():
     combined_distance_avg = combined_distance_df.groupby(['AimStyle', 'Gun'])['distance'].mean().reset_index()
     combined_time_avg = combined_time_diff_df.groupby(['AimStyle', 'Gun'])['TimeDiff'].mean().reset_index()
 
-    print(combined_accuracy_df)
-
     # create_heatmaps(combined_distance_df)
 
     # create_box_plot(combined_time_diff_df)
@@ -224,8 +192,26 @@ def main():
     sphere_accuracies = data[data['AimStyle'] == 'SPHERE']['accuracy']
     no_aim_accuracies = data[data['AimStyle'] == 'NO_AIM']['accuracy']
 
+    line_accuracies = combined_accuracy_df[combined_accuracy_df['AimStyle'] == 'LINE']['accuracy']
+
+    no_aim_accuracies = combined_accuracy_df[combined_accuracy_df['AimStyle'] == 'NO_AIM']['accuracy']
+
+    sphere_accuracies = combined_accuracy_df[combined_accuracy_df['AimStyle'] == 'SPHERE']['accuracy']
+    shapiro_results = {
+        'LINE': shapiro(line_accuracies),
+        'NO_AIM': shapiro(no_aim_accuracies),
+        'SPHERE': shapiro(sphere_accuracies)
+    }
+    print("Shapiro-Wilk test for accuracies: ")
+    for k, v in shapiro_results.items():
+        print(f"{k}: {v}")
+
+    print("\n")
+
 # Perform Kruskal-Wallis test
     stat, p_value = kruskal(line_accuracies, sphere_accuracies, no_aim_accuracies)
+
+    print("We can conclude that the data is not normally distributed \n")
 
     print(f"Kruskal-Wallis H-statistic: {stat}")
     print(f"P-value: {p_value}")
@@ -235,10 +221,6 @@ def main():
         posthoc = posthoc_dunn(data, val_col='accuracy', group_col='AimStyle', p_adjust='bonferroni')
 
         print(f"posthoc dunn:\n{posthoc}")
-
-        line_accuracies = combined_accuracy_df[combined_accuracy_df['AimStyle'] == 'LINE']['accuracy']
-        no_aim_accuracies = combined_accuracy_df[combined_accuracy_df['AimStyle'] == 'NO_AIM']['accuracy']
-        sphere_accuracies = combined_accuracy_df[combined_accuracy_df['AimStyle'] == 'SPHERE']['accuracy']
 
 # Calculate Cliff's delta for all pairwise comparisons
         aim_styles = {

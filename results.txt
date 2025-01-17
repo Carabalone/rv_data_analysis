@@ -1,0 +1,29 @@
+Processing session1.csv...
+Processing session2.csv...
+Processing session3.csv...
+Processing session4.csv...
+Processing session5.csv...
+Processing session6.csv...
+Processing session7.csv...
+Processing session8.csv...
+Processing session9.csv...
+Shapiro-Wilk test for accuracies: 
+LINE: ShapiroResult(statistic=0.9780632257461548, pvalue=0.927850067615509)
+NO_AIM: ShapiroResult(statistic=0.9118223190307617, pvalue=0.09264393895864487)
+SPHERE: ShapiroResult(statistic=0.9203124642372131, pvalue=0.13093018531799316)
+
+
+We can conclude that the data is not normally distributed 
+
+Kruskal-Wallis H-statistic: 10.489611493666608
+P-value: 0.005274846250690548
+Reject the null hypothesis: At least one aim style is significantly different.
+posthoc dunn:
+            LINE    NO_AIM    SPHERE
+LINE    1.000000  0.019139  1.000000
+NO_AIM  0.019139  1.000000  0.012075
+SPHERE  1.000000  0.012075  1.000000
+Cliffs Delta results:
+LINE vs NO_AIM: (0.5462962962962963, 'large')
+LINE vs SPHERE: (-0.046296296296296294, 'negligible')
+NO_AIM vs SPHERE: (-0.5401234567901234, 'large')
